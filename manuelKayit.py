@@ -40,6 +40,11 @@ class ManuelKayitPage(QWidget):
             nesbitimtarihi_raw = self.manuelKayitForm.dateEdit_nesBitimTarihi.date().toString("dd-MM-yyyy")
             nesbitimtarihi = datetime.strptime(nesbitimtarihi_raw, "%d-%m-%Y").strftime("%Y-%m-%d")
 
+            if vt.kayitVarMi(tc):
+                self.messageBoxHata("Bu kullanıcı veritabanında kayıtlı!")
+                return
+            
+
             if vt.kayitEkle(tc, ad, soyad, dogumtarihi, eposta, birim, nesbitimtarihi):
                 self.messageBoxBasari(title="Kayıt Başarılı!", text="Kayıt Başarıyla Gerçekleşti!")
                 # Alanları temizle
@@ -54,10 +59,10 @@ class ManuelKayitPage(QWidget):
                 self.messageBoxHata()
 
 
-        def messageBoxHata(self):
+        def messageBoxHata(self,string=""):
             msgBox = QMessageBox(self)
             msgBox.setWindowTitle("⚠ Hata Oluştu")
-            msgBox.setText(f"Hata!")
+            msgBox.setText(f"Hata! "+string)
             msgBox.setIcon(QMessageBox.Critical)
             msgBox.setStyleSheet("""
                 QMessageBox {
